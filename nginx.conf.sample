@@ -1,0 +1,71 @@
+upstream upnoader {
+  server 127.0.0.1:35194;
+}
+
+server {
+  listen 80;
+  server_name upnoader.example.com;
+
+  root /path/to/the/files;
+
+  location ~ ^/upload/(?<ruta>.*) {
+
+    if ($request_method = 'OPTIONS') {
+       add_header 'Access-Control-Allow-Origin' '*';
+       add_header 'Access-Control-Allow-Methods' 'PUT, OPTIONS';
+       add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+       add_header 'Access-Control-Max-Age' 1728000;
+       add_header 'Content-Type' 'text/plain charset=UTF-8';
+       add_header 'Content-Length' 0;
+       return 204;
+    }
+
+    secure_link $arg_m,$arg_t;
+    secure_link_md5 "$secure_link_expires$uri your-secret";
+    if ($secure_link = "") {
+      return 403;
+    }
+    if ($secure_link = "0") {
+      return 410;
+    }
+
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    client_max_body_size 50M;
+    proxy_pass http://upnoader/$ruta;
+  }
+
+  location ~ /private/ {
+    secure_link $arg_md5,$arg_expires;
+    secure_link_md5 "$secure_link_expires$uri downloadsxnodejs";
+
+    if ($secure_link = "") {
+    return 403;
+    }
+
+    if ($secure_link = "0") {
+    return 410;
+    }
+    try_files $uri =404;  
+  }
+
+  location / {
+    try_files $uri =407;
+  }
+
+}
+
+# HOW TO SIGN URLS IN NODE
+# var crypto require('crypto')
+#
+# var generateSecurePathHash = function (url, expires, secret) {
+#  if (!url || !expires || !secret) {
+#    return undefined
+#  }
+#  return (new Buffer(crypto.createHash('md5').update(expires + url + ' ' + secret).digest()).toString('base64')).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+# }
+# var sign = funcion (url, secret, timeout) {
+#   var t = Date.now() + timeout
+#   return url + '?m=' + generateSecurePathHash(url, t, yoursecret) + '&t=' + t
+# }

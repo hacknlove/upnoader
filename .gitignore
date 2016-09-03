@@ -1,0 +1,8 @@
+node_modules
+tools
+docker-dev.sh
+docker.sh
+files
+nginx.conf
+.bash_history
+npm-debug.log
