@@ -1,6 +1,7 @@
 FROM pykiss/node
 MAINTAINER hacknlove
 
+ADD package.json /src/
 ADD index.js /src/
 ADD start.sh /src/
 
