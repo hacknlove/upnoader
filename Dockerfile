@@ -6,6 +6,7 @@ ADD start.sh /src/
 
 run npm install
 
+VOLUME /uploads
 WORKDIR /src
 
-CMD start
+CMD /src/start.sh
