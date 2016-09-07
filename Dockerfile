@@ -8,7 +8,7 @@ ADD index.js /src/
 ADD start.sh /src/
 WORKDIR /src
 
-run npm install
+RUN cd /src && npm install 
 
 
 CMD /src/start.sh
