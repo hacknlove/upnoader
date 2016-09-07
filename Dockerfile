@@ -1,10 +1,10 @@
 FROM pykiss/node
 MAINTAINER hacknlove
 
-ADD node_modules /src/
 ADD index.js /src/
-
 ADD start.sh /src/
+
+run npm install
 
 WORKDIR /src
 
