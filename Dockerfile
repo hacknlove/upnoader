@@ -1,14 +1,14 @@
-FROM pykiss/node
+FROM node:onbuild
 MAINTAINER hacknlove
 
 VOLUME /uploads
 
-ADD package.json /src/
-ADD index.js /src/
-ADD start.sh /src/
-WORKDIR /src
+WORKDIR /upnoader
 
-RUN cd /src && npm install 
+ADD package.json /upnoader
+RUN npm install
 
+COPY index.js /upnoader
+COPY start.sh /upnoader
 
-CMD /src/start.sh
+CMD /upnoader/start.sh
