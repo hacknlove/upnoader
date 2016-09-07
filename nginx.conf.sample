@@ -47,7 +47,7 @@ server {
     if ($secure_link = "0") {
     return 410;
     }
-    try_files $uri =404;  
+    try_files $uri =404;
   }
 
   location / {
@@ -57,15 +57,15 @@ server {
 }
 
 # HOW TO SIGN URLS IN NODE
-# var crypto require('crypto')
+# var crypto = require('crypto')
 #
 # var generateSecurePathHash = function (url, expires, secret) {
-#  if (!url || !expires || !secret) {
-#    return undefined
-#  }
-#  return (new Buffer(crypto.createHash('md5').update(expires + url + ' ' + secret).digest()).toString('base64')).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+#   if (!url || !expires || !secret) {
+#     return undefined
+#   }
+#   return (new Buffer(crypto.createHash('md5').update(expires + url + ' ' + secret).digest()).toString('base64')).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 # }
-# var sign = funcion (url, secret, timeout) {
+# var sign = function (url, secret, timeout) {
 #   var t = Date.now() + timeout
-#   return url + '?m=' + generateSecurePathHash(url, t, yoursecret) + '&t=' + t
+#   return url + '?m=' + generateSecurePathHash(url, t, secret) + '&t=' + t
 # }
