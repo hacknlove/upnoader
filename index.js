@@ -24,9 +24,11 @@ app.put('/:path*', function (req, res, next) {
       return res.status(500).json({error: 'error saving'})
     }
     var stream = fs.createWriteStream(to)
-    stream.write(req.body)
-    stream.on('drain', function () {
-      res.status(200).json({ok: true})
+    stream.write(req.body, function (err) {
+      if (!err) {
+        stream.end()
+        res.status(200).json({ok: true})
+      }
     })
     stream.on('error', function (algo) {
       console.log(algo)
